@@ -1,0 +1,16 @@
+---
+- name: Make file for ansible facts.
+  copy:
+    content: "{{ ansible_facts }}"
+    dest: "/home/{{ ansible_facts.env.USER }}/code/facts.json"
+
+- name: Run python script to probe disk UUID's
+  script: ../templates/disks.py
+  args:
+    executable: python3
+  register: UUID
+
+- name: Set UUIDS as fact to use later.
+  set_fact:
+    UUIDS: "{{ UUID.stdout_lines }} "
+

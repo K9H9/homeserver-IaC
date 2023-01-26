@@ -1,0 +1,29 @@
+ansible_python_interpreter: /usr/bin/python3 
+packages:
+  - gcc
+  - clang
+  - docker
+  - docker-compose
+  - htop
+  - python3-pip
+  - git
+  - g++
+  - pkg-config
+  - git-buildpackage
+  - pandoc
+  - debhelper
+  - libfuse-dev
+  - libattr1-dev
+  - samba
+  - samba-common
+  - cifs-utils
+cidr: 192.168.100.0/24
+samba: { 
+  label: samba, 
+  path: /mnt/storage/samba, 
+  users: "{{ ansible_facts.env.USER }}", 
+  browsable: yes, 
+  readonly: no, 
+  writable: yes }
+
+

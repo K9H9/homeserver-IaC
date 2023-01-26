@@ -1,0 +1,42 @@
+---
+- name: Make .config directory for user configuration.
+  file:
+    path: "/home/{{ username }}/.config/"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+
+- name: Install NvChad.
+  git:
+    repo: https://github.com/NvChad/NvChad
+    dest: "/home/{{ username }}/.config/nvim"
+    depth: 1
+
+- name: Make directory.
+  file:
+    path: "/home/{{ username }}/code"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Clone config from github.
+  git:
+    repo: https://github.com/K9H9/neovim
+    dest: "/home/{{ username }}/code/neovim"
+
+- name: Create symlink to neovim configs.
+  file:
+    src: "/home/{{ username }}/code/neovim/"
+    dest: "/home/{{ username }}/.config/nvim/lua/custom"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: link
+- name: Copy API token for testaustime.
+  copy: 
+    src: /home/koho/code/neovim/plugins/testaustime/.token
+    dest: "/home/{{ username }}/code/neovim/plugins/testaustime/"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  
+

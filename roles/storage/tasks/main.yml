@@ -1,0 +1,7 @@
+---
+- include_tasks: probe.yml
+- include_tasks: mergerfs.yml
+- include_tasks: mount.yml
+- include_tasks: samba.yml
+
+

@@ -1,0 +1,49 @@
+---
+- name: Update package cache.
+  become: true
+  apt:
+    update_cache: true
+    name: "*" 
+    state: present
+
+- name: Install packages.
+  become: true
+  apt:
+    name: "{{ packages }}"
+    state: present
+
+- name: Remove snap.
+  become: true
+  apt:
+    name: snapd
+    state: absent
+
+
+
+- name: Make Downloads directory.
+  file:
+    path: "/home/{{ username }}/Downloads"
+    state: directory
+
+- name: Download NeoVim sha256 file.
+  get_url:
+    url: "https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.deb.sha256sum"
+    dest: "/home/{{ username }}/Downloads/nvim.sha256"
+
+- name: Get correct checksum.
+  shell:
+    cmd: "grep nvim-linux64.deb /home/{{ username }}/Downloads/nvim.sha256 | cut -d ' ' -f1"
+  register: sha256
+
+- name: Download latest NeoVim release.
+  get_url: 
+    url: "https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.deb"
+    dest: "/home/{{ username }}/Downloads/nvim.deb"
+    checksum: "sha256:{{ sha256.stdout }}"
+
+- name: Install NeoVim .deb package.
+  become: true
+  apt:
+    deb: "/home/{{ username }}/Downloads/nvim.deb"
+
+

@@ -1,0 +1,37 @@
+---
+- name: Make sure samba is running and started on boot.
+  service:
+    name: smbd
+    state: started
+    enabled: true
+
+- name: Copy samba configuration template.
+  become: true
+  template:
+    src: ../templates/smbd.conf.j2
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+
+- name: Insert samba configuration to /etc/samba/smbd.conf
+  become: true
+  blockinfile:
+    path: /etc/samba/smb.conf
+    insertafter: "#============================ Share Definitions =============================="
+    block: |
+      [samba]
+        path = /mnt/storage/samba
+        valid users = koho
+        browsable = yes
+        read only = no
+        writable = yes
+
+- name: Set samba password for samba users.
+  become: true
+  expect:
+    command: smbpasswd -L -a "{{ samba.users }}"
+    timeout: 3
+    responses:
+      'New SMB password': "{{ password }}"
+      'Retype new SMB password': "{{ password }}"
+

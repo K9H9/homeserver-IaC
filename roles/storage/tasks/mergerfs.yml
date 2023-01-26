@@ -1,0 +1,16 @@
+---
+- name: Download mergerfs deb package.
+  get_url: 
+    url: "{{ mergerfs_install_url }}"
+    dest: /tmp/mergerfs_2.34.1.ubuntu-jammy_amd64.deb
+
+- name: Install mergerfs.
+  become: true
+  apt:
+    deb: /tmp/mergerfs_2.34.1.ubuntu-jammy_amd64.deb
+    state: present
+
+
+
+
+

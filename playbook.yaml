@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars_files:
+    - vault.yml
+  roles:
+  # - role: system
+  - role: storage
+    include_task: handlers/main.yml
+

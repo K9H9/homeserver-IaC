@@ -1,0 +1,55 @@
+---
+- name: Make mount directories for data disks.
+  become: true
+  file:
+    path: "/mnt/disk{{ item }}"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: "0777"
+  with_sequence: start=1 end="{{disk_count}}"
+
+- name: Make mount directory for parity disk.
+  become: true
+  file:
+    path: "/mnt/parity"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: "0777"
+
+- name: Mount disks.
+  become: true
+  mount:
+    path: "/mnt/disk{{ index }}"
+    src: "{{ item }}"
+    fstype: ext4
+    state: mounted
+
+  loop: "{{ UUIDS[:-1] }}"
+  loop_control: 
+    index_var: index
+
+- name: Make directory for mergerfs pool.
+  become: true
+  file:
+    path: "/mnt/storage"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: "0777"
+
+- name: Mount mergerfs pool.
+  become: true 
+  mount:
+    name: "/mnt/storage"
+    src: /mnt/disk*
+    opts: defaults,nonempty,allow_other,direct_io,fsname=mergerfs
+    fstype: fuse.mergerfs
+    state: mounted
+
+
+
+
+
+
