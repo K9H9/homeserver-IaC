@@ -1,0 +1,51 @@
+---
+- name: Clone snapraid repo.
+  git:
+    repo: "https://github.com/IronicBadger/docker-snapraid"
+    dest: /tmp/snapraid
+
+# - name: Build snapraid.
+#   command: sh ./build.sh
+#   args:
+#     chdir: /tmp/snapraid/
+
+     
+- name: Use dpkg.
+  become: true
+  apt:
+    deb: /tmp/snapraid/build/snapraid-from-source.deb
+    state: present
+
+
+
+
+- name: Copy snapraid configuration template.
+  become: true
+  template:
+    src: ../templates/snapraid.conf.j2
+    dest: /etc/snapraid.conf
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Schedule snapraid sync.
+  become: true
+  cron:
+    name: snapraid sync
+    job: snapraid sync     
+    user: root
+    weekday: "{{ snapraid_sync_schedule.weekday | default ('*') }}"
+    minute: "{{ snapraid_sync_schedule.minute | default ('0')}}"
+    hour: "{{ snapraid_sync_schedule.hour | default ('0') }}"
+    dom: "{{ snapraid_sync_schedule.dom|default('*') }}"
+
+- name: Schedule snapraid scrub.
+  become: true
+  cron:
+    name: snapraid scrub
+    job: snapraid scrub --plan {{ snapraid_scrub_percent }} --older-than {{ snapraid_scrub_age }}
+    user: root
+    weekday: "{{ snapraid_scrub_schedule.weekday | default ('*') }}"
+    minute: "{{ snapraid_scrub_schedule.minute | default ('0')}}"
+    hour: "{{ snapraid_scrub_schedule.hour | default ('0') }}"
+    dom: "{{ snapraid_scrub_schedule.dom|default('*') }}"

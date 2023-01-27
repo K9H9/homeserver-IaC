@@ -48,6 +48,13 @@
     fstype: fuse.mergerfs
     state: mounted
 
+- name: Mount parity disk.
+  become: true
+  mount:
+    path: "/mnt/parity"
+    src: "{{ UUIDS[-1] }}"
+    fstype: ext4
+    state: mounted
 
 
 

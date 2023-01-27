@@ -34,4 +34,5 @@
     responses:
       'New SMB password': "{{ password }}"
       'Retype new SMB password': "{{ password }}"
+  notify: restart samba
 
