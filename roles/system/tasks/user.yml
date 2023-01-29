@@ -1,8 +1,11 @@
 ---
-- name: Set username as fact.
-  become: true
-  set_fact:
-    username: "{{ ansible_facts.env.USER }}"
+- name: Get username.
+  shell:
+    cmd: whoami
+  register: whoami_out
+
+- set_fact:
+    username: "{{ whoami_out.stdout }}"
 
 
 - name: Disable login message.

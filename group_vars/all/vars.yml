@@ -1,5 +1,5 @@
 ansible_port: 22
-ansible_port_ssh: 2222
+ansible_port_configured: 2222
 ansible_python_interpreter: /usr/bin/python3 
 packages:
   - gcc
