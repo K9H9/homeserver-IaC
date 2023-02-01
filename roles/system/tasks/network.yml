@@ -1,0 +1,22 @@
+---
+- name: Make netplan dir.
+  become: true
+  file:
+    path: /etc/netplan
+    state: directory
+    owner: root
+    group: root
+
+- name: Copy netplan config.
+  become: true
+  template:
+    src: ../templates/netplan.yaml
+    dest: /etc/netplan/00-ansible_network.yaml
+    owner: root
+    group: root
+  
+- name: Apply netplan.
+  become: true
+  shell:
+    cmd: "netplan apply"
+

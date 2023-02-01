@@ -4,10 +4,10 @@
     repo: "https://github.com/IronicBadger/docker-snapraid"
     dest: /tmp/snapraid
 
-# - name: Build snapraid.
-#   command: sh ./build.sh
-#   args:
-#     chdir: /tmp/snapraid/
+- name: Build snapraid.
+  command: sh ./build.sh
+  args:
+    chdir: /tmp/snapraid/
 
      
 - name: Use dpkg.

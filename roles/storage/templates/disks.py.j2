@@ -1,0 +1,26 @@
+FILEPATH = "/home/{{ username }}/code/facts"
+sizes = ["931.5G", "894.3G"]
+
+def main(file):
+    with open(file) as datafile:
+        lines = datafile.read()
+        datafile.close()
+    data = lines.strip('][').split(', ')
+    properData = [line.strip("][") for line in data]
+    size, uuid = [], []
+    for item in properData:
+        if '"sd' in item.split(" ")[0]:
+            if item.split(" ")[-5] in sizes:
+                size.append(item.split(" ")[0].strip('"'))
+        else:
+            uuid.append(item)
+    last = []
+    for UUID in uuid:
+        if UUID.split(": ")[0].split("/")[-1] in size:
+            print("UUID={}".format(UUID.split("=")[1].split(" ")[0].strip("\\").strip('"').strip("\\")))
+        else:
+            last.append(UUID.split("=")[1].split(" ")[0].strip("\\").strip('"').strip("\\"))
+
+    print("UUID={}".format(last[0]))
+if __name__ == "__main__":
+    main(FILEPATH)

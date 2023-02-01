@@ -1,19 +1,49 @@
 ---
 
-- name: Get disk uuids.
+- name: Get disk UUID's.
   shell:
-# - name: Make file for ansible facts.
-#   copy:
-#     content: "{{ ansible_facts }}"
-#     dest: "/home/{{ ansible_facts.env.USER }}/code/facts.json"
-#
-# - name: Run python script to probe disk UUID's
-#   script: ../templates/disks.py
-#   args:
-#     executable: python3
-#   register: UUID
-#
-# - name: Set UUIDS as fact to use later.
-#   set_fact:
-#     UUIDS: "{{ UUID.stdout_lines }} "
+    cmd: "blkid | grep '/dev/sd'"
+  register: disks_by_uuid
+
+- name: Get disk sizes.
+  shell:
+    cmd: "lsblk | grep sd"
+  register: disk_by_size
+
+- debug:
+    msg: 
+      - "{{ disk_by_size }}"
+      - "{{ disks_by_uuid }}"
+
+- name: Copy UUID's to file.
+  copy:
+    content: 
+      - "{{ disk_by_size.stdout_lines }}"
+      - "{{ disks_by_uuid.stdout_lines }}"
+    dest: "/home/{{ username }}/code/facts"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+
+
+- name: Move python disk script template.
+  template:
+    src: ../templates/disks.py.j2
+    dest: "/home/{{ username }}/code/disks.py"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+ 
+- name: Run python script.
+  shell:
+    cmd: "python3 /home/{{ username }}/code/disks.py"
+  register: UUID
+
+
+- name: Set UUIDS as fact to use later.
+  set_fact:
+    UUIDS: "{{ UUID.stdout_lines }} "
+
+
+
+
 

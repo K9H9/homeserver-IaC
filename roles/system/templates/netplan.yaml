@@ -1,0 +1,14 @@
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        enp0s31f6:
+            dhcp4: false
+            addresses:
+                - "{{ server_ip }}/24"
+            nameservers:
+                addresses: [192.168.100.1, 8.8.8.8]
+            routes:
+                - to: default
+                  via: 192.168.100.1
+

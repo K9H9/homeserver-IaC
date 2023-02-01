@@ -1,9 +1,10 @@
 ---
-- hosts: all
+- hosts: home
+  gather_facts: false
   vars_files:
     - vault.yml
   roles:
-  - role: security
+  # - role: security
   - role: system
   - role: storage
 

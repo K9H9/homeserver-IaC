@@ -1,0 +1,5 @@
+---
+- name: apply netplan
+  become: true
+  shell:
+    cmd: "netplan apply"
