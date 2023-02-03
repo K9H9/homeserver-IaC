@@ -14,9 +14,12 @@
     dest: /etc/netplan/00-ansible_network.yaml
     owner: root
     group: root
-  
-- name: Apply netplan.
-  become: true
-  shell:
-    cmd: "netplan apply"
 
+- name: Delete cloud-init installer netplan config.
+  become: true
+  file:
+    path: /etc/netplan/00-installer-config.yaml
+    state: absent
+  notify: apply netplan
+
+- meta: flush_handlers

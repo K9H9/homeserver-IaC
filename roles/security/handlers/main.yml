@@ -1,6 +1,22 @@
 ---
+- name: change port
+  become: true
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^Port"
+    line: "Port {{ ansible_conf_port }}"
+    owner: root
+    group: root
+    mode: "0644"
+
 - name: restart sshd
   become: true
   service:
     name: sshd
     state: restarted
+
+- set_fact:
+    ansible_port: "{{ ansible_conf_port }}"
+- debug: 
+    msg: "now using {{ ansible_conf_port }}"
+

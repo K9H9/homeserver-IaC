@@ -4,7 +4,7 @@
   vars_files:
     - vault.yml
   roles:
-  # - role: security
+  - role: security
   - role: system
   - role: storage
 

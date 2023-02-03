@@ -10,10 +10,6 @@
     cmd: "lsblk | grep sd"
   register: disk_by_size
 
-- debug:
-    msg: 
-      - "{{ disk_by_size }}"
-      - "{{ disks_by_uuid }}"
 
 - name: Copy UUID's to file.
   copy:

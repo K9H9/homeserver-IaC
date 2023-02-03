@@ -1,1 +1,22 @@
+- name: SSH Port Juggle | define the fallback default SSH port
+  set_fact:
+    _default_ssh_port: 22
+
+- name: SSH Port Juggle | Try configured ansible_port {{ ansible_port }}
+  wait_for_connection:
+    timeout: 10
+  ignore_errors: true
+  register: _ssh_port_result
+
+- name: SSH Port Juggle | Set the ansible_port to the fallback default port {{ _default_ssh_port }}
+  set_fact:
+    ansible_port: "{{ _default_ssh_port }}"
+  when:
+    - _ssh_port_result is failed
+  notify:
+    - restart sshd
+    - change port
+  changed_when: true
+
+- meta: flush_handlers
 
