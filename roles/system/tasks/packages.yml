@@ -18,6 +18,11 @@
     name: snapd
     state: absent
 
+- name: Install pip packages.
+  pip:
+    name:
+      - docker
+      - docker-compose
 
 
 - name: Make Downloads directory.

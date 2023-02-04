@@ -22,4 +22,6 @@
     state: absent
   notify: apply netplan
 
+
+
 - meta: flush_handlers

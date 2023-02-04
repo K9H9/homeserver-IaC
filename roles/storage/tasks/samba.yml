@@ -12,6 +12,7 @@
     dest: /etc/samba/smb.conf
     owner: root
     group: root
+    mode: "0644"
 
 - name: Insert samba configuration to /etc/samba/smbd.conf
   become: true
@@ -35,4 +36,6 @@
       'New SMB password': "{{ password }}"
       'Retype new SMB password': "{{ password }}"
   notify: restart samba
+
+- meta: flush_handlers
 

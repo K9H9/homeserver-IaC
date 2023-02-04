@@ -1,0 +1,7 @@
+---
+- name: Ensure ufw is started and set default policy to deny.
+  ufw:
+    state: enabled
+    policy: deny
+    logging: "on"
+

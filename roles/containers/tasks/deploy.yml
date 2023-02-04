@@ -1,0 +1,30 @@
+---
+- name: Copy env template for docker-compose file.
+  become: true
+  template:
+    src: ../templates/env.j2
+    dest: "{{ docker_path }}/.env"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+
+- name: Create docker network.
+  docker_network:
+    name: proxy
+  changed_when: true
+  notify: 
+    - disable systemd-resolved 
+    - change nameserver
+
+
+- meta: flush_handlers
+
+- name: Start docker stack.
+  docker_compose:
+    project_src: "{{ docker_path }}"
+    build: false
+  ignore_errors: true
+  register: compose_up
+
+- debug:
+    msg: "{{ compose_up.module_stdout }}"
+
