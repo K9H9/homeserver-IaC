@@ -23,12 +23,21 @@
     state: stopped
     enabled: false
 
-- name: change nameserver
-  become: true
-  lineinfile:
-    path: /etc/resolv.conf
-    regexp: "^nameserver"
-    line: "nameserver 127.0.0.1"
-    owner: root
-    group: root
-    mode: "0644"
+# - name: make resolv.conf
+#   become: true
+#   file:
+#     path: /etc/resolv.conf
+#     state: touch
+#     owner: root
+#     group: root
+#     mode: "0644"
+#
+# - name: change nameserver
+#   become: true
+#   lineinfile:
+#     path: /etc/resolv.conf
+#     regexp: "^nameserver"
+#     line: "nameserver 127.0.0.1"
+#     owner: root
+#     group: root
+#     mode: "0644"

@@ -1,5 +1,11 @@
 ansible_port: 2222
 ansible_conf_port: 2222 # set to same as ansible_port
+dns_port: "53"
+ports_to_allow: 
+  - "80"
+  - "443"
+  - "53"
+  - "{{ ansible_port }}"
 ansible_python_interpreter: /usr/bin/python3 
 packages:
   - gcc
@@ -20,7 +26,7 @@ packages:
   - samba-common
   - cifs-utils
 cidr: 192.168.100.0/24
-server_ip: 192.168.100.99
+server_ip: 192.168.100.12
 samba: { 
   label: samba, 
   path: /mnt/storage/samba, 

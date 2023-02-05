@@ -1,7 +1,25 @@
 ---
 - name: Ensure ufw is started and set default policy to deny.
+  become: true
   ufw:
     state: enabled
     policy: deny
     logging: "on"
+
+- name: Allow http, https, ssh(on port {{ ansible_port }})
+  become: true
+  ufw:
+    rule: allow
+    proto: tcp
+    port: "{{ item }}" 
+    src: "{{ cidr }}"
+  loop: "{{ ports_to_allow }}"
+
+- name: Allow dns 
+  become: true
+  ufw:
+    rule: allow
+    proto: udp
+    port: "{{ dns_port }}" 
+    src: "{{ cidr }}"
 
