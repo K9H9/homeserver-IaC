@@ -7,12 +7,9 @@
   - role: security
 
   - role: system
-    tags: first
 
   - role: storage
 
   - role: containers
 
-  - role: system
-    tags: last
 
